@@ -2,6 +2,7 @@ const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config();
 
 
@@ -30,6 +31,23 @@ client.connect(err => {
             res.send(result.insertedCount);
         })
     })
+
+    //read all food data
+    app.get('/foods', (req, res) => {
+        foodCollection.find({})
+        .toArray( (err, documents) => {
+            res.send(documents);
+        })
+    })
+
+    //read single food data
+    app.get('/singleFood/:id', (req, res) => {
+        foodCollection.find({_id: ObjectId(req.params.id)})
+        .toArray( (err, documents) => {
+            res.send(documents[0]);
+        })
+    })
+
 
 });
 
